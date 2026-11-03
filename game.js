@@ -6,7 +6,7 @@
 
     var ROWS = 8, COLS = 8, TYPES = 5;
     var CELL = 66, GAP = 2;               // cell 尺寸與間距
-    var ICONS = ['assets/icons/lotus.jpg', 'assets/icons/scale.jpg', 'assets/icons/scroll.jpg', 'assets/icons/liar.jpg', 'assets/icons/liebomb.jpg'];
+    var ICONS = ['lotus.jpg', 'scale.jpg', 'scroll.jpg', 'liar.jpg', 'liebomb.jpg'];
     var PUPPET_TYPE = 3, BOMB_ICON = 4;
 
     var board = document.getElementById('board');

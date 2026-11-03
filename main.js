@@ -39,19 +39,19 @@
     // ---------- 主界面：星球 ----------
     var PLANETS = {
         game: {
-            name: '趣遊星', tag: '遊戲站', mascot: 'assets/pingping.png',
+            name: '趣遊星', tag: '遊戲站', mascot: 'pingping.png',
             desc: '在遊戲星球放鬆身心！《清風消消樂》拖動圖案、清除騙子木偶與謊言炸彈，無限關卡越後越難；《廉潔神槍手》滑動瞄準、射擊答案靶，邊射邊學廉潔知識！',
             enter: function () { showPage('game'); if (window.GameInit) window.GameInit(); },
             btn: '進入遊戲站',
         },
         case: {
-            name: '明鏡星', tag: '澳門案例研讀', mascot: 'assets/qingqing.png',
+            name: '明鏡星', tag: '澳門案例研讀', mascot: 'qingqing.png',
             desc: '閱讀澳門本地真實廉潔案例，讀完回答「案例放大鏡」的題目，答對即獲得星光積分。目前收錄 5 篇真實案例：警隊洩密受賄、社服機構圍標、前助理檢察長瀆職、速遞公司回佣、選舉提名賄選。',
             enter: function () { showPage('case'); },
             btn: '前往研讀',
         },
         story: {
-            name: '澄星', tag: '主線劇情・澄星保衛戰', mascot: 'assets/lianlian.png',
+            name: '澄星', tag: '主線劇情・澄星保衛戰', mascot: 'lianlian.png',
             desc: '廉潔之星「澄星」的平衡被貪念擾亂。在另外兩顆星球完成任務、收集星光積分，達到 300 星光即可解鎖主線劇情，一步步光復澄星。',
             enter: function () { showPage('story'); },
             btn: '前往澄星',
