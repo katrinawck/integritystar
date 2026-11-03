@@ -1,0 +1,286 @@
+/* ============ 澄星網站・桌面橫向版式 ============ */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+    --purple: #7c5cc8; --purple-d: #3a2d54; --purple-l: #efe9fb;
+    --green: #2fa876; --gold: #d09a3c; --ink: #3a2d54; --muted: #8a7fa8;
+}
+html, body { height: 100%; }
+body {
+    font-family: "Microsoft JhengHei", "PingFang TC", "Noto Sans TC", sans-serif;
+    color: var(--ink); overflow: hidden; background: #e6ecff;
+}
+button { font-family: inherit; cursor: pointer; }
+
+/* ---------- 頂欄 ---------- */
+.topbar {
+    position: fixed; top: 0; left: 0; right: 0; height: 58px; z-index: 90;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 28px; background: rgba(255,255,255,.82); backdrop-filter: blur(10px);
+    box-shadow: 0 2px 14px rgba(90,70,160,.12);
+}
+.topbar-logo { font-size: 24px; font-weight: 700; color: var(--purple); cursor: pointer; letter-spacing: 2px; }
+.topbar-right { display: flex; align-items: center; gap: 14px; }
+.points-chip {
+    display: flex; align-items: center; gap: 6px; background: #fff;
+    border: 2px solid #e5dcf7; border-radius: 999px; padding: 6px 16px;
+    font-size: 18px; font-weight: 700; color: var(--purple);
+}
+.points-icon { color: var(--gold); }
+.points-label { font-size: 13px; color: var(--muted); font-weight: 400; }
+.topbar-btn {
+    border: 2px solid #e0d7f2; background: #fff; color: var(--ink);
+    border-radius: 999px; padding: 7px 18px; font-size: 14px;
+}
+.topbar-btn:hover { background: var(--purple-l); }
+
+/* ---------- 頁面切換 ---------- */
+#app { height: calc(100vh - 58px); margin-top: 58px; position: relative; }
+.page { position: absolute; inset: 0; overflow: auto; }
+[hidden] { display: none !important; }
+
+/* ---------- 通用按鈕 ---------- */
+.btn {
+    display: inline-block; border: none; border-radius: 999px;
+    padding: 12px 34px; font-size: 17px; font-weight: 700; transition: .18s;
+}
+.btn-primary { background: linear-gradient(135deg,#8f6fe0,#6a4bc0); color: #fff; box-shadow: 0 6px 18px rgba(124,92,200,.35); }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(124,92,200,.45); }
+.btn-ghost { background: #fff; color: var(--ink); border: 2px solid #e0d7f2; }
+.btn-ghost:hover { background: var(--purple-l); }
+.btn-gold { background: linear-gradient(135deg,#f3c566,#dd9c37); color: #5a3c0c; box-shadow: 0 6px 18px rgba(214,150,60,.35); }
+.btn-big { font-size: 20px; padding: 15px 52px; }
+.btn-sm { padding: 8px 20px; font-size: 14px; }
+
+/* ---------- 啟動畫面 ---------- */
+.page-splash {
+    background: url('../assets/splash-wide.jpg') center/cover no-repeat;
+    display: flex; align-items: center; justify-content: center; position: relative;
+}
+.splash-card {
+    margin-left: 8%; background: rgba(255,255,255,.88); backdrop-filter: blur(6px);
+    border-radius: 34px; padding: 44px 56px; text-align: center; max-width: 520px;
+    box-shadow: 0 20px 60px rgba(120,90,180,.30); animation: cardIn .7s cubic-bezier(.2,1.2,.4,1) both;
+}
+@keyframes cardIn { from { opacity: 0; transform: translateY(46px) scale(.94); } }
+.splash-mascot { width: 150px; animation: bob 3.2s ease-in-out infinite; }
+@keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+.splash-title { font-size: 52px; color: var(--purple); letter-spacing: 10px; margin: 6px 0 2px; }
+.splash-sub { font-size: 19px; color: var(--gold); font-weight: 700; margin-bottom: 12px; }
+.splash-desc { font-size: 15px; line-height: 1.8; color: #6a6284; margin-bottom: 22px; }
+.splash-tip {
+    position: absolute; bottom: 26px; right: 36px; color: rgba(90,70,40,.75);
+    font-size: 13px; letter-spacing: 2px; background: rgba(255,255,255,.6);
+    padding: 6px 16px; border-radius: 999px;
+}
+.splash-float { position: absolute; border-radius: 50%; background: rgba(255,255,255,.35); animation: floatY 7s ease-in-out infinite; }
+.f1 { width: 120px; height: 120px; left: 6%; top: 16%; }
+.f2 { width: 70px; height: 70px; left: 30%; bottom: 18%; animation-delay: 1.6s; }
+.f3 { width: 90px; height: 90px; right: 10%; top: 22%; animation-delay: 3s; }
+@keyframes floatY { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-26px); } }
+
+/* ---------- 星際地圖 ---------- */
+.page-home { background: url('../assets/home-wide.jpg') center/cover no-repeat; }
+.planet-hotspot {
+    position: absolute; width: 200px; height: 200px; transform: translate(-50%,-50%);
+    border-radius: 50%; cursor: pointer; display: flex; align-items: flex-end; justify-content: center;
+    transition: transform .2s;
+}
+.planet-hotspot:hover { transform: translate(-50%,-50%) scale(1.07); }
+.planet-hotspot::before {
+    content: ''; position: absolute; inset: 8%; border-radius: 50%;
+    border: 3px dashed rgba(255,255,255,.75); animation: spin 14s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.planet-chip {
+    background: rgba(255,255,255,.92); border-radius: 999px; padding: 8px 20px;
+    text-align: center; box-shadow: 0 6px 18px rgba(90,70,160,.25); margin-bottom: -8px;
+}
+.planet-chip b { display: block; font-size: 18px; color: var(--ink); }
+.planet-chip i { display: block; font-style: normal; font-size: 12px; color: var(--muted); }
+.home-guide { position: absolute; left: 28px; bottom: 24px; display: flex; align-items: flex-end; gap: 10px; }
+.home-guide img { width: 110px; animation: bob 3.6s ease-in-out infinite; }
+.home-guide-bubble {
+    background: rgba(255,255,255,.94); border-radius: 18px 18px 18px 4px;
+    padding: 12px 18px; font-size: 15px; max-width: 300px; box-shadow: 0 6px 18px rgba(90,70,160,.2);
+}
+.card-mask { position: fixed; inset: 0; background: rgba(58,45,84,.45); z-index: 80; display: flex; align-items: center; justify-content: center; }
+.planet-card {
+    position: relative; width: 480px; background: #fff; border-radius: 30px;
+    padding: 40px 42px 34px; text-align: center; animation: cardIn .35s cubic-bezier(.2,1.2,.4,1) both;
+}
+.card-close { position: absolute; right: 18px; top: 18px; width: 36px; height: 36px; border-radius: 50%; border: none; background: var(--purple-l); color: var(--purple); font-size: 16px; }
+.card-mascot { width: 110px; position: absolute; top: -62px; left: 50%; transform: translateX(-50%); filter: drop-shadow(0 8px 14px rgba(90,70,160,.3)); }
+.planet-card h2 { font-size: 28px; margin-top: 44px; }
+.card-tag { display: inline-block; background: var(--purple-l); color: var(--purple); font-size: 13px; font-weight: 700; border-radius: 999px; padding: 4px 16px; margin: 8px 0 14px; }
+.planet-card p { font-size: 15px; line-height: 1.9; color: #5d5474; margin-bottom: 18px; }
+.card-status { background: #fdf4e3; color: #8a6a1f; border-radius: 14px; padding: 10px 16px; font-size: 14px; margin-bottom: 16px; }
+
+/* ---------- 進度條 ---------- */
+.progress { height: 12px; background: #ece6f8; border-radius: 999px; overflow: hidden; margin: 6px 0 12px; }
+.progress-bar { height: 100%; width: 0; background: linear-gradient(90deg,#8f6fe0,#b79bef); border-radius: 999px; transition: width .4s; }
+
+/* ---------- 消消樂 ---------- */
+.page-game { background: linear-gradient(160deg,#eafaf1 0%,#dff0fb 55%,#f2ecfb 100%); }
+.game-layout { display: flex; height: 100%; align-items: center; justify-content: center; gap: 44px; padding: 20px 4vw; }
+.game-side { width: 300px; background: rgba(255,255,255,.92); border-radius: 26px; padding: 24px 26px; box-shadow: 0 14px 40px rgba(47,120,90,.16); }
+.side-mascot { width: 96px; display: block; margin: -70px auto 4px; animation: bob 3.4s ease-in-out infinite; }
+.game-side h2 { text-align: center; color: #1f5c40; font-size: 24px; margin-bottom: 14px; }
+.side-row { display: flex; justify-content: space-between; align-items: center; font-size: 15px; color: #4a5a52; padding: 7px 0; }
+.side-row b { font-size: 19px; color: #1f5c40; }
+.side-hint { font-size: 13px; color: #7d8f85; line-height: 1.7; margin: 10px 0 14px; }
+.game-side .btn { display: block; width: 100%; margin-top: 10px; text-align: center; }
+.board-wrap { position: relative; }
+.board {
+    position: relative; width: 560px; height: 560px;
+    background: rgba(255,255,255,.75); border-radius: 24px;
+    box-shadow: 0 18px 50px rgba(47,120,90,.22), inset 0 0 0 4px rgba(47,163,107,.18);
+}
+.cell {
+    position: absolute; width: 66px; height: 66px; border-radius: 18px;
+    background: #fff center/72% no-repeat; border: 2px solid #d8efe3;
+    transition: left .22s ease, top .22s ease, transform .12s;
+    cursor: pointer; box-shadow: 0 3px 8px rgba(40,90,70,.12);
+}
+.cell:hover { transform: scale(1.06); }
+.cell.sel { outline: 4px solid #2fa876; transform: scale(1.1); }
+.cell.bomb { background-size: 82%; border-color: #f2c6a0; }
+.board-mask { position: absolute; inset: 0; background: rgba(255,255,255,.86); border-radius: 24px; display: flex; align-items: center; justify-content: center; }
+.board-mask-card { text-align: center; padding: 30px; }
+.board-mask-card h3 { font-size: 30px; color: #1f5c40; margin-bottom: 10px; }
+.board-mask-card p { font-size: 16px; color: #5d6f65; margin-bottom: 18px; }
+.board-mask-card .btn { display: block; width: 260px; margin: 10px auto 0; }
+
+/* ---------- 神槍手 ---------- */
+.page-shooter { background: linear-gradient(180deg,#22335d 0%,#3a2d54 40%,#5a3f8c 100%); position: relative; overflow: hidden; }
+.page-shooter::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background-image:
+        radial-gradient(1.5px 1.5px at 12% 20%, #fff 60%, transparent),
+        radial-gradient(1.5px 1.5px at 30% 65%, #ffe9a8 60%, transparent),
+        radial-gradient(2px 2px at 55% 15%, #fff 60%, transparent),
+        radial-gradient(1.5px 1.5px at 75% 45%, #fff 60%, transparent),
+        radial-gradient(2px 2px at 90% 25%, #cfe4ff 60%, transparent),
+        radial-gradient(1.5px 1.5px at 45% 80%, #fff 60%, transparent);
+}
+.panel-wrap { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 30; background: rgba(20,16,40,.5); }
+.panel { width: 560px; background: #fff; border-radius: 30px; padding: 34px 40px; text-align: center; animation: cardIn .35s both; }
+.panel h2 { font-size: 28px; color: var(--purple-d); }
+.panel-sub { font-size: 14px; color: var(--muted); margin: 6px 0 18px; }
+.panel .btn { display: block; width: 100%; margin-top: 12px; }
+.gun-list { display: flex; gap: 14px; }
+.gun-card { flex: 1; border: 3px solid #e5dcf7; border-radius: 20px; padding: 18px 16px; text-align: left; background: #faf8ff; transition: .15s; }
+.gun-card.on { border-color: var(--purple); background: var(--purple-l); }
+.gun-card h4 { font-size: 20px; color: var(--ink); }
+.gun-card .tag { display: inline-block; font-size: 12px; background: #fdf4e3; color: #8a6a1f; border-radius: 999px; padding: 2px 10px; margin: 4px 0 8px; }
+.gun-card p { font-size: 13px; color: #6a6284; line-height: 1.6; }
+.gun-card .ammo { font-size: 13px; font-weight: 700; color: var(--purple); margin-top: 8px; }
+.diff-list { text-align: left; }
+.diff-item { display: flex; align-items: center; gap: 12px; border: 3px solid #e5dcf7; border-radius: 16px; padding: 13px 18px; margin-bottom: 10px; cursor: pointer; background: #faf8ff; }
+.diff-item.on { border-color: var(--purple); background: var(--purple-l); }
+.diff-item b { font-size: 18px; }
+.diff-item span { flex: 1; font-size: 13px; color: #6a6284; }
+.shooter-stage { position: absolute; inset: 0; z-index: 10; }
+.sh-hud { display: flex; justify-content: space-between; align-items: center; padding: 16px 4vw; color: #fff; font-size: 18px; font-weight: 700; }
+.hud-ammo { background: rgba(255,255,255,.14); border-radius: 999px; padding: 6px 20px; }
+.hud-ammo.low { color: #ff9d9d; }
+.hud-mid { background: rgba(255,255,255,.1); border-radius: 999px; padding: 6px 20px; font-size: 15px; font-weight: 400; }
+.sh-qbox {
+    margin: 6px auto 0; width: 70%; background: rgba(255,255,255,.96); border-radius: 20px;
+    padding: 18px 30px; text-align: center; font-size: 21px; font-weight: 700; color: var(--ink);
+    box-shadow: 0 10px 30px rgba(0,0,0,.3);
+}
+.sh-arena { position: absolute; left: 0; right: 0; top: 220px; bottom: 150px; }
+.sh-target {
+    position: absolute; width: 150px; min-height: 210px; background: rgba(255,255,255,.97);
+    border: 4px solid #c9b6f2; border-radius: 22px; padding: 12px 8px 14px;
+    display: flex; flex-direction: column; align-items: center; box-shadow: 0 8px 26px rgba(0,0,0,.35);
+}
+.sh-target .ring {
+    width: 62px; height: 62px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    background: radial-gradient(circle at 50% 40%, #fff 0%, #f3ecff 40%, #cbb8f5 70%, #6d4fb4 100%);
+    border: 3px solid #5b3f8c; font-size: 30px; font-weight: 700; color: var(--ink); margin-bottom: 8px;
+}
+.sh-target .txt { font-size: 15px; color: #4a4556; text-align: center; line-height: 1.35; }
+.sh-target.hit-ok { background: #eafff3; border-color: #2fa876; animation: okPulse .68s ease; }
+.sh-target.hit-ok .ring { background: radial-gradient(circle at 50% 40%, #eafff3 0%, #9ff0c8 45%, #2fa876 100%); }
+@keyframes okPulse { 45% { transform: scale(1.1); box-shadow: 0 0 40px 14px rgba(58,200,130,.85); } }
+.sh-target.hit-bad { background: #efeceb; border-color: #9a9494; filter: grayscale(.6); }
+.sh-target.veil { opacity: .12; }
+.sh-crosshair { position: absolute; width: 0; height: 0; z-index: 20; transform: translateX(-50%); pointer-events: none; }
+.cross-line { position: absolute; left: -2px; top: -130px; width: 4px; height: 180px; background: linear-gradient(180deg, rgba(245,200,106,.05), #f5c86a); border-radius: 2px; }
+.cross-dot { position: absolute; left: -11px; top: -11px; width: 22px; height: 22px; border-radius: 50%; background: #f5c86a; border: 3px solid #a3721e; }
+.sh-bullet {
+    position: absolute; width: 22px; height: 22px; border-radius: 50%; transform: translate(-50%,-50%);
+    background: radial-gradient(circle at 45% 40%, #fff 0%, #ffe9a8 45%, #f0b23e 100%);
+    box-shadow: 0 0 22px 8px rgba(255,214,120,.9); z-index: 19;
+    transition: top .3s cubic-bezier(.25,0,.8,1), left .3s;
+}
+.sh-slider-zone { position: absolute; left: 10%; right: 10%; bottom: 46px; height: 80px; z-index: 25; cursor: grab; }
+.sh-slider-zone:active { cursor: grabbing; }
+.sh-track { position: absolute; left: 0; right: 0; top: 50%; height: 18px; margin-top: -9px; border-radius: 9px; background: rgba(255,255,255,.28); border: 2px solid rgba(255,255,255,.5); }
+.sh-knob { position: absolute; top: 50%; width: 64px; height: 64px; margin: -32px 0 0 -32px; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #f7c9ea, #d979c4); border: 4px solid #fff; box-shadow: 0 6px 20px rgba(0,0,0,.4); }
+.sh-hint { position: absolute; left: 0; right: 0; bottom: 10px; text-align: center; color: rgba(255,255,255,.75); font-size: 14px; z-index: 24; }
+.popup-wrap { z-index: 40; }
+.popup h3 { font-size: 26px; margin-bottom: 10px; }
+.popup h3.ok { color: #2fa876; } .popup h3.bad { color: #c05a5a; } .popup h3.miss { color: #8a7fa8; }
+.popup p { font-size: 16px; line-height: 1.9; color: #4a4556; text-align: left; }
+.popup .popup-extra { font-weight: 700; color: var(--purple); }
+.star-row { font-size: 40px; letter-spacing: 8px; color: #e2dcef; margin-bottom: 6px; }
+.star-row .on { color: #f5c86a; }
+.result-grid { display: flex; gap: 16px; margin: 16px 0; }
+.result-grid div { flex: 1; background: var(--purple-l); border-radius: 18px; padding: 16px; }
+.result-grid b { display: block; font-size: 30px; color: var(--purple); }
+.result-grid span { font-size: 13px; color: var(--muted); }
+.result-points { font-size: 19px; font-weight: 700; color: var(--gold); margin-bottom: 8px; }
+
+/* ---------- 明鏡星・案例 ---------- */
+.page-case { background: linear-gradient(160deg,#f2ecfb 0%,#e8ecff 60%,#fdf1f6 100%); padding: 24px 4vw 40px; text-align: center; position: relative; }
+.case-mascot { width: 90px; position: absolute; right: 5vw; top: 14px; animation: bob 3.4s ease-in-out infinite; }
+.case-title { font-size: 30px; color: var(--purple); margin-top: 4px; }
+.case-sub { font-size: 14px; color: var(--muted); margin: 6px 0 20px; }
+.case-carousel { display: flex; align-items: center; gap: 10px; max-width: 1240px; margin: 0 auto; }
+.case-nav { width: 46px; height: 46px; border-radius: 50%; border: none; background: #fff; color: var(--purple); font-size: 24px; box-shadow: 0 4px 14px rgba(90,70,160,.2); flex-shrink: 0; }
+.case-cards { position: relative; flex: 1; height: 380px; }
+.case-card {
+    position: absolute; top: 50%; left: 50%; width: 400px; height: 350px;
+    background: #fff; border-radius: 26px; padding: 26px 28px; text-align: left;
+    box-shadow: 0 14px 40px rgba(90,70,160,.18); transition: all .45s cubic-bezier(.3,1,.4,1); cursor: pointer;
+}
+.case-card .num { font-size: 14px; color: var(--muted); font-weight: 700; }
+.case-card h4 { font-size: 21px; color: var(--ink); margin: 6px 0 10px; line-height: 1.4; }
+.case-card .summ { font-size: 14px; color: #6a6284; line-height: 1.8; }
+.case-card .tagline { display: inline-block; margin-top: 12px; font-size: 13px; font-weight: 700; color: var(--purple); background: var(--purple-l); border-radius: 999px; padding: 5px 16px; }
+.case-card.locked { filter: saturate(.25); }
+.case-card.center { cursor: pointer; }
+.case-card.side { cursor: pointer; }
+.case-stage { max-width: 980px; margin: 0 auto; background: #fff; border-radius: 26px; padding: 24px 34px; text-align: left; box-shadow: 0 14px 40px rgba(90,70,160,.16); }
+.case-stage-head { display: flex; align-items: center; justify-content: space-between; gap: 14px; border-bottom: 2px solid #f0eaf9; padding-bottom: 12px; margin-bottom: 14px; }
+.case-stage-head h3 { flex: 1; font-size: 22px; }
+.stage-tag { font-size: 13px; color: var(--purple); background: var(--purple-l); padding: 4px 14px; border-radius: 999px; white-space: nowrap; }
+.case-stage-body { max-height: 44vh; overflow: auto; font-size: 16px; line-height: 2.1; color: #484158; padding-right: 8px; }
+.story-hl { background: linear-gradient(transparent 55%, #ffe9a8 55%); font-weight: 700; padding: 0 2px; }
+.case-stage-foot { margin-top: 16px; display: flex; gap: 12px; justify-content: flex-end; }
+.opt {
+    display: flex; gap: 12px; align-items: flex-start; border: 3px solid #ece7f6; border-radius: 16px;
+    padding: 13px 16px; margin-bottom: 10px; cursor: pointer; background: #fbfaff; transition: .15s; font-size: 15px; line-height: 1.6;
+}
+.opt:hover { border-color: #c9b6f2; }
+.opt .abc { flex-shrink: 0; width: 30px; height: 30px; border-radius: 50%; background: #e4dcf5; color: #6a5a94; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+.opt.picked { border-color: var(--purple); background: var(--purple-l); }
+.opt.picked .abc { background: var(--purple); color: #fff; }
+.opt.right { border-color: #2fa876; background: #eafff3; }
+.opt.right .abc { background: #2fa876; color: #fff; }
+.opt.wrong { border-color: #c05a5a; background: #fdeeee; }
+.opt.wrong .abc { background: #c05a5a; color: #fff; }
+.ans-box { background: #eafaf1; border-radius: 16px; padding: 14px 18px; margin-top: 8px; font-size: 15px; line-height: 1.8; color: #1f5c40; }
+.src-box { font-size: 12.5px; color: #9a92b0; margin-top: 14px; line-height: 1.7; }
+
+/* ---------- 劇情 ---------- */
+.page-story { background: radial-gradient(circle at 50% 20%, #fdf6e8 0%, #f4e6c8 100%); display: flex; align-items: center; justify-content: center; }
+.story-card { width: 720px; background: rgba(255,255,255,.94); border-radius: 30px; padding: 40px 48px; text-align: center; position: relative; box-shadow: 0 18px 50px rgba(160,120,40,.25); }
+.story-mascot { width: 120px; position: absolute; top: -66px; left: 50%; transform: translateX(-50%); animation: bob 3.4s ease-in-out infinite; }
+.story-card h2 { margin-top: 48px; font-size: 28px; color: #8a6a1f; }
+.story-card > p { font-size: 16px; line-height: 2; color: #6a5a3a; margin: 14px 0 20px; text-align: left; }
+.story-progress-head { display: flex; justify-content: space-between; font-size: 16px; font-weight: 700; color: #8a6a1f; margin-bottom: 4px; }
+.story-lock { background: #eafaf1; color: #1f7a50; border-radius: 16px; padding: 13px; font-size: 16px; font-weight: 700; margin: 16px 0; }
+.story-card .btn { width: 100%; }

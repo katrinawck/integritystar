@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>澄星・澳門廉潔教育互動網站</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- 頂欄 -->
+<header class="topbar" id="topbar">
+    <div class="topbar-logo" id="topHome">✦ 澄星</div>
+    <div class="topbar-right">
+        <div class="points-chip"><span class="points-icon">◆</span><span id="pointsNum">0</span><span class="points-label">星光</span></div>
+        <button class="topbar-btn" id="btnHome" hidden>返回星際地圖</button>
+    </div>
+</header>
+
+<main id="app">
+
+    <!-- ============ 啟動畫面 ============ -->
+    <section class="page page-splash" id="page-splash">
+        <div class="splash-float f1"></div>
+        <div class="splash-float f2"></div>
+        <div class="splash-float f3"></div>
+        <div class="splash-card">
+            <img class="splash-mascot" src="assets/lianlian.png" alt="蓮蓮">
+            <h1 class="splash-title">澄星</h1>
+            <p class="splash-sub">澳門廉潔教育互動網站</p>
+            <p class="splash-desc">在趣遊星挑戰小遊戲、在明鏡星研讀真實案例，收集星光積分，喚醒廉潔之星「澄星」！</p>
+            <button class="btn btn-primary btn-big" id="btnStart">開始旅程 ›</button>
+        </div>
+        <div class="splash-tip">Children & Youth × Integrity Education</div>
+    </section>
+
+    <!-- ============ 星際地圖（主畫面） ============ -->
+    <section class="page page-home" id="page-home" hidden>
+        <div class="planet-hotspot" data-key="game" style="left:34%;top:41%;">
+            <span class="planet-chip"><b>趣遊星</b><i>消消樂 × 神槍手</i></span>
+        </div>
+        <div class="planet-hotspot" data-key="case" style="left:66%;top:35%;">
+            <span class="planet-chip"><b>明鏡星</b><i>澳門案例研讀</i></span>
+        </div>
+        <div class="planet-hotspot" data-key="story" style="left:50%;top:72%;">
+            <span class="planet-chip"><b>澄星</b><i>主線劇情</i></span>
+        </div>
+
+        <!-- 吉祥物嚮導 -->
+        <div class="home-guide">
+            <img src="assets/pingping.png" alt="平平">
+            <div class="home-guide-bubble" id="guideBubble">歡迎來到澄星！點擊星球看看有什麼吧～</div>
+        </div>
+
+        <!-- 星球介紹卡 -->
+        <div class="card-mask" id="planetCard" hidden>
+            <div class="planet-card" id="planetCardBox">
+                <button class="card-close" id="cardClose">✕</button>
+                <img class="card-mascot" id="cardMascot" src="assets/pingping.png" alt="">
+                <h2 id="cardName"></h2>
+                <span class="card-tag" id="cardTag"></span>
+                <p id="cardDesc"></p>
+                <div class="card-status" id="cardStatus" hidden></div>
+                <button class="btn btn-primary" id="cardEnter">進入 ›</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ 清風消消樂 ============ -->
+    <section class="page page-game" id="page-game" hidden>
+        <div class="game-layout">
+            <aside class="game-side">
+                <img class="side-mascot" src="assets/pingping.png" alt="平平">
+                <h2>清風消消樂</h2>
+                <div class="side-row"><span>關卡</span><b id="mLevel">1</b></div>
+                <div class="side-row"><span>剩餘步數</span><b id="mMoves">20</b></div>
+                <div class="side-row"><span>目標：清除騙子木偶</span><b id="mPuppet">0 / 12</b></div>
+                <div class="progress"><div class="progress-bar" id="mPuppetBar"></div></div>
+                <div class="side-row"><span>得分</span><b id="mScore">0</b></div>
+                <p class="side-hint">點擊選中圖案，再點相鄰圖案交換，三連即可消除！</p>
+                <button class="btn btn-ghost" id="btnGameHome">‹ 返回星際地圖</button>
+                <button class="btn btn-ghost" id="btnGameChoose">‹ 換其他遊戲</button>
+            </aside>
+            <div class="board-wrap">
+                <div class="board" id="board"></div>
+                <div class="board-mask" id="boardMask" hidden>
+                    <div class="board-mask-card">
+                        <h3 id="maskTitle"></h3>
+                        <p id="maskText"></p>
+                        <div id="maskBtns"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ 廉潔神槍手 ============ -->
+    <section class="page page-shooter" id="page-shooter" hidden>
+        <!-- 選槍 -->
+        <div class="panel-wrap" id="shGun">
+            <div class="panel">
+                <h2>選擇能量槍</h2>
+                <p class="panel-sub">卡通能量造型・非寫實槍械</p>
+                <div class="gun-list" id="gunList"></div>
+                <button class="btn btn-primary" id="btnGunOk">確認攜帶 ›</button>
+            </div>
+        </div>
+        <!-- 難度 -->
+        <div class="panel-wrap" id="shDiff" hidden>
+            <div class="panel">
+                <h2>選擇難度</h2>
+                <p class="panel-sub">難度影響答案靶游走速度與補彈數量</p>
+                <div class="diff-list" id="diffList"></div>
+                <button class="btn btn-primary" id="btnDiffOk">開始任務 ›</button>
+                <button class="btn btn-ghost" id="btnDiffBack">‹ 重選能量槍</button>
+            </div>
+        </div>
+        <!-- 對局 -->
+        <div class="shooter-stage" id="shPlay" hidden>
+            <div class="sh-hud">
+                <span class="hud-ammo" id="shAmmo">◆ 彈藥 35</span>
+                <span class="hud-mid" id="shQIdx">1 / 15</span>
+                <span class="hud-score" id="shScore">得分 0</span>
+            </div>
+            <div class="sh-qbox" id="shQ">題目</div>
+            <div class="sh-arena" id="shArena">
+                <div class="sh-crosshair" id="shCross"><div class="cross-line"></div><div class="cross-dot"></div></div>
+                <div class="sh-bullet" id="shBullet" hidden></div>
+            </div>
+            <div class="sh-slider-zone" id="shSlider">
+                <div class="sh-track"></div>
+                <div class="sh-knob" id="shKnob"></div>
+            </div>
+            <p class="sh-hint">按住下方控制桿左右滑動瞄準，鬆手發射</p>
+        </div>
+        <!-- 彈窗 -->
+        <div class="panel-wrap popup-wrap" id="shPopup" hidden>
+            <div class="panel popup" id="shPopupBox">
+                <h3 id="shPopupTitle"></h3>
+                <p id="shPopupBody"></p>
+                <p class="popup-extra" id="shPopupExtra"></p>
+                <button class="btn btn-primary" id="shPopupNext">繼續 ›</button>
+            </div>
+        </div>
+        <!-- 結算 -->
+        <div class="panel-wrap" id="shOver" hidden>
+            <div class="panel">
+                <div class="star-row" id="shStars"></div>
+                <h2 id="shOverTitle"></h2>
+                <p id="shOverText"></p>
+                <div class="result-grid">
+                    <div><b id="shOverScore">0</b><span>總得分</span></div>
+                    <div><b id="shOverCorrect">0</b><span>答對題數</span></div>
+                </div>
+                <p class="result-points">◆ 獲得星光積分 +<span id="shOverEarned">0</span></p>
+                <button class="btn btn-primary" id="btnShAgain">再挑戰一次</button>
+                <button class="btn btn-ghost" id="btnShHome">‹ 返回星際地圖</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ 明鏡星・案例研讀 ============ -->
+    <section class="page page-case" id="page-case" hidden>
+        <img class="case-mascot" src="assets/qingqing.png" alt="清清">
+        <h2 class="case-title">澳門案例研讀</h2>
+        <p class="case-sub">閱讀真實案例，回答「案例放大鏡」，答對一篇 +40 星光</p>
+
+        <!-- 輪播 -->
+        <div class="case-carousel" id="caseCarousel">
+            <button class="case-nav" id="casePrev">‹</button>
+            <div class="case-cards" id="caseCards"></div>
+            <button class="case-nav" id="caseNext">›</button>
+        </div>
+
+        <!-- 研讀三階段 -->
+        <div class="case-stage" id="caseStage" hidden>
+            <div class="case-stage-head">
+                <button class="btn btn-ghost btn-sm" id="caseBack">‹ 返回展台</button>
+                <h3 id="stageTitle"></h3>
+                <span class="stage-tag" id="stageStep"></span>
+            </div>
+            <div class="case-stage-body" id="stageBody"></div>
+            <div class="case-stage-foot" id="stageFoot"></div>
+        </div>
+    </section>
+
+    <!-- ============ 主線劇情 ============ -->
+    <section class="page page-story" id="page-story" hidden>
+        <div class="story-card">
+            <img class="story-mascot" src="assets/lianlian.png" alt="蓮蓮">
+            <h2>主線劇情・澄星保衛戰</h2>
+            <p>廉潔之星「澄星」的平衡被貪念擾亂，天平的光芒漸漸黯淡。在「趣遊星」通關小遊戲、在「明鏡星」研讀澳門案例答題，收集星光積分，就能解開封印、喚醒澄星。</p>
+            <div class="story-progress">
+                <div class="story-progress-head"><span>星光收集進度</span><b id="storyPoints">0 / 300</b></div>
+                <div class="progress"><div class="progress-bar" id="storyBar"></div></div>
+            </div>
+            <div class="story-lock" id="storyLock">已達標！第一章正在趕製中，敬請期待</div>
+            <button class="btn btn-ghost" id="btnStoryHome">‹ 返回星際地圖</button>
+        </div>
+    </section>
+
+</main>
+
+<script src="js/match3.js"></script>
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+<script src="js/game.js"></script>
+<script src="js/shooter.js"></script>
+</body>
+</html>
