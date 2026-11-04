@@ -17,7 +17,7 @@
 
     var el = {};
     ['shGun', 'shDiff', 'shPlay', 'shPopup', 'shOver', 'gunList', 'diffList', 'shAmmo', 'shQIdx', 'shScore',
-     'shQ', 'shArena', 'shCross', 'shBullet', 'shSlider', 'shKnob', 'shPopupTitle', 'shPopupBody',
+     'shQ', 'shOpts', 'shArena', 'shCross', 'shBullet', 'shSlider', 'shKnob', 'shPopupTitle', 'shPopupBody',
      'shPopupExtra', 'shPopupNext', 'shStars', 'shOverTitle', 'shOverText', 'shOverScore',
      'shOverCorrect', 'shOverEarned'].forEach(function (id) { el[id] = document.getElementById(id); });
 
@@ -109,6 +109,14 @@
         }
         tip = q.tip;
         el.shQ.textContent = q.q;
+        // 選項文字列在題目下方（與靶上字母一一對應）
+        el.shOpts.innerHTML = '';
+        targets.forEach(function (t) {
+            var d = document.createElement('div');
+            d.className = 'sh-opt';
+            d.innerHTML = '<b>' + t.letter + '</b><span>' + t.text + '</span>';
+            el.shOpts.appendChild(d);
+        });
         el.shQIdx.textContent = (qIndex + 1) + ' / ' + TOTAL;
         renderHud();
         buildTargets();
@@ -122,12 +130,13 @@
 
     // ---------- 靶區 ----------
     var BASE = [0.10, 0.37, 0.63, 0.90];   // 四張靶的基準中心（佔靶區寬比例）
+    var TARGET_SIZE = 120;                  // 圓靶直徑
     function buildTargets() {
         el.shArena.querySelectorAll('.sh-target').forEach(function (n) { n.remove(); });
         targets.forEach(function (t) {
             var d = document.createElement('div');
             d.className = 'sh-target';
-            d.innerHTML = '<div class="ring">' + t.letter + '</div><div class="txt">' + t.text + '</div>';
+            d.innerHTML = '<div class="ring"><span>' + t.letter + '</span></div>';
             el.shArena.appendChild(d);
             t.el = d;
         });
@@ -139,20 +148,19 @@
         var d = DIFFS[diff];
         arenaW = el.shArena.clientWidth;
         var arenaH = el.shArena.clientHeight;
-        var CARD_W = 150;
         function frame(now) {
             var t = (now - t0) / 1000;
             var shift = Math.sin(t * 0.55) * d.shift;
             targets.forEach(function (tg, i) {
                 var dx = Math.sin(t * d.speed + i * 1.6) * d.range;
                 var cx = (BASE[i] * arenaW) + shift + dx;
-                var half = CARD_W / 2;
+                var half = TARGET_SIZE / 2;
                 if (cx < half + 6) cx = half + 6;
                 if (cx > arenaW - half - 6) cx = arenaW - half - 6;
-                var cy = arenaH * 0.34 + Math.sin(t * d.speed * 0.8 + i * 2.1) * d.float;
+                var cy = arenaH * 0.40 + Math.sin(t * d.speed * 0.8 + i * 2.1) * d.float;
                 tg.cx = cx; tg.cy = cy;
                 tg.el.style.left = (cx - half) + 'px';
-                tg.el.style.top = (cy - 105) + 'px';
+                tg.el.style.top = (cy - half) + 'px';
                 tg.el.classList.toggle('veil', hideIdx === i);
             });
             el.shCross.style.left = (aim * arenaW) + 'px';
@@ -243,6 +251,7 @@
             cls = 'ok';
         } else {
             targets[hitIdx].el.classList.add('hit-bad');
+            targets[answerIdx].el.classList.add('hit-ok');   // 高亮正確靶，幫助記憶
             title = '答錯了・來看看解釋'; body = tip;
             extra = '正確答案：' + targets[answerIdx].letter + '　' + targets[answerIdx].text;
             cls = 'bad';
@@ -286,4 +295,7 @@
     window.addEventListener('resize', function () {
         if (state === 'shPlay') arenaW = el.shArena.clientWidth;
     });
+
+    // 每次從趣遊星進入時重置到選槍
+    window.ShooterShow = function () { show('shGun'); };
 })();
