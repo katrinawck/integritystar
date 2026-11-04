@@ -6,12 +6,13 @@
 
     var ROWS = 8, COLS = 8, TYPES = 5;
     var CELL = 66, GAP = 2;               // cell 尺寸與間距
-    var ICONS = ['assets/icons/lotus.jpg', 'assets/icons/scale.jpg', 'assets/icons/scroll.jpg', 'assets/icons/liar.jpg', 'assets/icons/liebomb.jpg'];
+    var ICONS = ['lotus.jpg', 'scale.jpg', 'scroll.jpg', 'liar.jpg', 'liebomb.jpg'];
     var PUPPET_TYPE = 3, BOMB_ICON = 4;
 
     var board = document.getElementById('board');
     var el = {};
-    ['mLevel', 'mMoves', 'mPuppet', 'mPuppetBar', 'mScore', 'boardMask', 'maskTitle', 'maskText', 'maskBtns']
+    ['mLevel', 'mMoves', 'mPuppet', 'mPuppetBar', 'mScore', 'boardMask', 'maskTitle', 'maskText', 'maskBtns',
+     'gameChoose', 'gcMatch3', 'gcShooter']
         .forEach(function (id) { el[id] = document.getElementById(id); });
 
     var level = 1, moves = 0, score = 0, puppetGoal = 0, puppetCleared = 0;
@@ -47,16 +48,20 @@
     function buildViews() {
         board.innerHTML = '';
         views = {};
-        cells.forEach(function (c) {
-            var d = document.createElement('div');
-            d.className = 'cell' + (c.special === 'bomb' ? ' bomb' : '');
-            d.style.backgroundImage = "url('" + (c.special === 'bomb' ? ICONS[BOMB_ICON] : ICONS[c.type]) + "')";
-            d.style.left = posLeft(c.col) + 'px';
-            d.style.top = posTop(c.row) + 'px';
-            d.addEventListener('click', function () { onCellTap(c.id); });
-            board.appendChild(d);
-            views[c.id] = d;
-        });
+        cells.forEach(function (c) { createView(c); });
+    }
+
+    function createView(c) {
+        var d = document.createElement('div');
+        d.className = 'cell' + (c.special === 'bomb' ? ' bomb' : '');
+        d.style.backgroundImage = "url('" + (c.special === 'bomb' ? ICONS[BOMB_ICON] : ICONS[c.type]) + "')";
+        d.style.left = posLeft(c.col) + 'px';
+        d.style.top = posTop(c.row) + 'px';
+        d.dataset.id = c.id;
+        d.addEventListener('click', function () { onCellTap(c.id); });
+        board.appendChild(d);
+        views[c.id] = d;
+        return d;
     }
 
     function refreshView(cell) {
@@ -70,6 +75,7 @@
 
     function onCellTap(id) {
         if (busy) return;
+        if (dragged) { dragged = false; return; }   // 剛完成拖動交換，忽略隨後的 click
         if (!sel) {
             sel = id;
             views[id].classList.add('sel');
@@ -102,13 +108,66 @@
             if (hit.ids.length === 0) {
                 M.swapCells(a, b);
                 refreshView(a); refreshView(b);
-                setTimeout(function () { busy = false; }, 220);
+                // 無效交換：震動提示
+                [a, b].forEach(function (c) {
+                    var d = views[c.id];
+                    if (d) {
+                        d.classList.add('nope');
+                        setTimeout(function () { d.classList.remove('nope'); }, 400);
+                    }
+                });
+                showBoardTip('交換後要湊成三連才能消除喔');
+                setTimeout(function () { busy = false; }, 300);
                 return;
             }
             moves -= 1;
             resolveMatches();
         }, 230);
     }
+
+    // 棋盤上的臨時提示條
+    var tipTimer = null;
+    function showBoardTip(text) {
+        var tip = document.getElementById('boardTip');
+        if (!tip) return;
+        tip.textContent = text;
+        tip.classList.add('show');
+        if (tipTimer) clearTimeout(tipTimer);
+        tipTimer = setTimeout(function () { tip.classList.remove('show'); }, 1800);
+    }
+
+    /* ---- 拖動交換（鼠標 + 觸屏通用，Pointer Events）---- */
+    var downId = null, downXY = null, dragged = false;
+
+    board.addEventListener('pointerdown', function (e) {
+        if (busy) return;
+        var t = e.target.closest ? e.target.closest('.cell') : null;
+        if (!t || !board.contains(t)) return;
+        downId = t.dataset.id;          // 注意：id 是字串（如 'c1'）
+        downXY = { x: e.clientX, y: e.clientY };
+        dragged = false;
+    });
+
+    board.addEventListener('pointermove', function (e) {
+        if (busy || downId === null || dragged) return;
+        var dx = e.clientX - downXY.x;
+        var dy = e.clientY - downXY.y;
+        if (Math.abs(dx) < 34 && Math.abs(dy) < 34) return;   // 要拖過半格才觸發
+        var a = cells.find(function (c) { return String(c.id) === downId; });
+        if (!a) { downId = null; return; }
+        var b = null;
+        if (Math.abs(dx) > Math.abs(dy)) {
+            b = cells.find(function (c) { return c.row === a.row && c.col === a.col + (dx > 0 ? 1 : -1); });
+        } else {
+            b = cells.find(function (c) { return c.col === a.col && c.row === a.row + (dy > 0 ? 1 : -1); });
+        }
+        dragged = true;
+        if (sel !== null && views[sel]) { views[sel].classList.remove('sel'); sel = null; }
+        if (b) trySwap(a, b);
+    });
+
+    window.addEventListener('pointerup', function () { downId = null; });
+    window.addEventListener('pointercancel', function () { downId = null; });
 
     function resolveMatches() {
         var hit = M.findMatches(cells, ROWS, COLS);
@@ -139,14 +198,9 @@
             });
             cells.forEach(function (c) {
                 if (!views[c.id]) {
-                    var d = document.createElement('div');
-                    d.className = 'cell';
-                    d.style.left = posLeft(c.col) + 'px';
+                    var d = createView(c);
                     d.style.top = (posTop(c.row) - 460) + 'px';   // 從上方掉入
                     d.style.opacity = '0';
-                    d.addEventListener('click', function () { onCellTap(c.id); });
-                    board.appendChild(d);
-                    views[c.id] = d;
                 }
                 refreshView(c);
             });
@@ -231,8 +285,20 @@
     }
 
     window.GameInit = function () {
-        startLevel(Math.min(maxLevelDone, Math.max(1, maxLevelDone)));
+        // 進入趣遊星：先顯示雙遊戲選擇
+        el.gameChoose.hidden = false;
+        el.boardMask.hidden = true;
     };
+    el.gcMatch3.addEventListener('click', function () {
+        el.gameChoose.hidden = true;
+        startLevel(Math.min(maxLevelDone, Math.max(1, maxLevelDone)));
+    });
+    el.gcShooter.addEventListener('click', function () {
+        window.ChengStar.showPage('shooter');
+        if (window.ShooterShow) window.ShooterShow();
+    });
     document.getElementById('btnGameHome').addEventListener('click', function () { window.ChengStar.showPage('home'); });
-    document.getElementById('btnGameChoose').addEventListener('click', function () { window.ChengStar.showPage('home'); });
+    document.getElementById('btnGameChoose').addEventListener('click', function () {
+        el.gameChoose.hidden = false;
+    });
 })();
