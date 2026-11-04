@@ -4,7 +4,7 @@
 
     var POINTS_KEY = 'chengsing-points';
     var CASE_KEY = 'case-progress';
-    var STORY_UNLOCK = 300;
+    var STORY_UNLOCK = 100;
 
     // ---------- 星光 ----------
     function getPoints() {
@@ -28,7 +28,7 @@
         });
         current = id;
         document.getElementById('btnHome').hidden = (id === 'splash' || id === 'home');
-        if (id === 'story') renderStory();
+        if (id === 'story' && window.Story) window.Story.open();
         if (id === 'case') buildCarousel();
     };
 
@@ -52,7 +52,7 @@
         },
         story: {
             name: '澄星', tag: '主線劇情・澄星保衛戰', mascot: 'assets/lianlian.png',
-            desc: '廉潔之星「澄星」的平衡被貪念擾亂。在另外兩顆星球完成任務、收集星光積分，達到 300 星光即可解鎖主線劇情，一步步光復澄星。',
+            desc: '廉潔之星「澄星」的平衡被貪念擾亂。收集 100 星光開啟主線劇情，走進荒蕪星球、做出你的選擇，一幕一幕重建清白星球。每一幕都可用星光換領，你的選擇會寫出不同的結局。',
             enter: function () { showPage('story'); },
             btn: '前往澄星',
         },
@@ -278,15 +278,7 @@
         foot.appendChild(btn);
     }
 
-    // ---------- 劇情 ----------
-    function renderStory() {
-        var pts = getPoints();
-        document.getElementById('storyPoints').textContent = pts + ' / ' + STORY_UNLOCK;
-        document.getElementById('storyBar').style.width = Math.min(100, pts / STORY_UNLOCK * 100) + '%';
-        document.getElementById('storyLock').textContent = pts >= STORY_UNLOCK
-            ? '已達標！第一章正在趕製中，敬請期待'
-            : '還差 ' + (STORY_UNLOCK - pts) + ' 星光解鎖劇情，加油！';
-    }
+    // ---------- 劇情（引擎在 js/story.js） ----------
     document.getElementById('btnStoryHome').addEventListener('click', function () { showPage('home'); });
 
     // ---------- 提供給其他模組 ----------
